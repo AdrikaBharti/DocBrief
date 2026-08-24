@@ -1,17 +1,4 @@
-/**
- * summarizer.js
- *
- * Lightweight extractive summarizer.
- *
- * Steps:
- * 1. Split the document into sentences.
- * 2. Ignore common stopwords.
- * 3. Count useful word frequencies.
- * 4. Score sentences using word frequency and position.
- * 5. Give a small bonus to sentences containing useful indicators
- *    such as "result", "conclusion", numbers, etc.
- * 6. Select the best sentences and restore their document order.
- */
+
 
 const STOPWORDS = new Set([
   "a","about","above","after","again","against","all","am","an","and","any",

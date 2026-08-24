@@ -3,9 +3,19 @@
 
 DocBrief accepts PDF files and common image formats. It extracts the document text, creates an extractive summary, and shows the main points and frequent keywords.
 
-## Live Demo
+## Live Demo 
+**[View DocBrief →](https://doc-brief-snowy.vercel.app/)**
 
 ## Screenshots
+### Upload Interface
+
+![DocBrief Upload Interface](images\UI.png)
+
+### Summary Result
+
+![DocBrief Summary Result](images\Res1.png)
+(images\Res2.png)
+(images\Res3.png)
 
 ## Features
 - PDF upload with drag-and-drop

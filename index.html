@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="DocBrief - a simple document summarization assistant">
+  <title>DocBrief | Document Summary Assistant</title>
+  <link rel="stylesheet" href="style.css">
+   <link rel="icon" type="image/png" href="images\app_icon.png">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#" aria-label="DocBrief home">
+        <span class="logo-mark">DB</span>
+        <span>
+          <strong>DocBrief</strong>
+          <small>Document Summary Assistant</small>
+        </span>
+      </a>
+      <a class="repo-link" href="https://github.com/AdrikaBharti" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="intro">
+      <h1>Turn long documents into useful notes.</h1>
+      <p>Upload a PDF or scanned image, choose how much detail you want, and get a clear summary with key points and keywords.</p>
+    </section>
+
+    <section class="upload-card">
+      <div class="dropzone" id="dropzone">
+        <input type="file" id="fileInput" accept=".pdf,image/png,image/jpeg,image/jpg,image/webp" hidden>
+        <div id="dropzoneContent">
+          <div class="upload-circle">↑</div>
+          <p class="dropzone-title">Drop your document here</p>
+          <p class="dropzone-sub">or choose a file from your device</p>
+          <button class="btn btn-primary" id="browseBtn" type="button">Choose file</button>
+          <p class="dropzone-hint">PDF, PNG, JPG or WEBP · maximum 15 MB</p>
+        </div>
+
+        <div class="file-selected" id="fileSelected" hidden>
+          <div class="file-info">
+            <div class="file-type-icon">📄</div>
+            <div>
+              <p class="file-name" id="fileName"></p>
+              <p class="file-meta" id="fileMeta"></p>
+            </div>
+          </div>
+          <button class="btn btn-ghost" id="removeFileBtn" type="button">Remove</button>
+        </div>
+      </div>
+
+      <div class="options-row">
+        <div>
+          <label class="option-label">Summary length</label>
+          <div class="segmented" id="lengthSegmented">
+            <button class="segmented-btn" data-length="short" type="button">Short</button>
+            <button class="segmented-btn is-active" data-length="medium" type="button">Medium</button>
+            <button class="segmented-btn" data-length="long" type="button">Long</button>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-generate" id="generateBtn" type="button" disabled>
+          Generate summary
+        </button>
+      </div>
+
+      <div class="progress-area" id="progressArea" hidden>
+        <div class="progress-row">
+          <span class="spinner"></span>
+          <span id="progressLabel">Reading document...</span>
+        </div>
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" id="progressBarFill"></div>
+        </div>
+      </div>
+
+      <div class="error-box" id="errorBox" hidden></div>
+    </section>
+
+    <section class="results" id="resultsSection" hidden>
+      <div class="results-header">
+        <div>
+          <div class="eyebrow">Your result</div>
+          <h2>Document summary</h2>
+        </div>
+        <div class="results-actions">
+          <button class="btn btn-ghost" id="copyBtn" type="button">Copy</button>
+          <button class="btn btn-primary small-btn" id="downloadBtn" type="button">Download</button>
+          <button class="btn btn-ghost" id="clearResultBtn" type="button">Clear</button>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card"><span>Original words</span><strong id="originalWords">0</strong></div>
+        <div class="stat-card"><span>Summary words</span><strong id="summaryWords">0</strong></div>
+        <div class="stat-card"><span>Compression</span><strong id="compressionStat">0%</strong></div>
+        <div class="stat-card"><span>Sentences</span><strong id="sentenceStat">0 → 0</strong></div>
+      </div>
+
+      <article class="summary-card">
+        <div class="card-heading">
+          <h3>Summary</h3>
+          <span class="badge" id="lengthBadge">Medium</span>
+        </div>
+        <p id="summaryCard"></p>
+      </article>
+
+      <div class="two-column">
+        <div class="keypoints-card">
+          <div class="card-heading">
+            <h3>Key points</h3>
+            <span class="mini-label">Most relevant sentences</span>
+          </div>
+          <ul id="keypointsList"></ul>
+        </div>
+
+        <div class="keywords-card">
+          <div class="card-heading">
+            <h3>Keywords</h3>
+            <span class="mini-label">Frequent terms</span>
+          </div>
+          <div class="keyword-list" id="keywordList"></div>
+        </div>
+      </div>
+
+      <div class="compression-card">
+        <div>
+          <strong>Summary compression</strong>
+          <p id="compressionText">The summary is shorter than the extracted text.</p>
+        </div>
+        <div class="compression-meter">
+          <div id="compressionFill"></div>
+        </div>
+      </div>
+
+      <details class="raw-text-details">
+        <summary>View extracted text</summary>
+        <div class="raw-text-box" id="rawTextBox"></div>
+      </details>
+    </section>
+
+    <section class="history-section">
+      <div class="section-heading">
+        <div>
+          <div class="eyebrow">Saved on this device</div>
+          <h2>Recent documents</h2>
+        </div>
+        <button class="btn btn-ghost" id="clearHistoryBtn" type="button">Clear history</button>
+      </div>
+      <div id="historyList" class="history-list"></div>
+      <p id="emptyHistory" class="empty-history">Recent summaries will appear here.</p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>DocBrief </p>
+    <p>PDF extraction, OCR and summarization</p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <script src="summarizer.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

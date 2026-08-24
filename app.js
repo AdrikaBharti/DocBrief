@@ -260,7 +260,8 @@ function renderResults(rawText, result) {
   lengthBadge.textContent =
     selectedLength.charAt(0).toUpperCase() + selectedLength.slice(1);
 
-  compressionFill.style.width = `${Math.min(compression, 100)}%`;
+  
+  compressionFill.style.width =`${Math.min(result.compression, 100)}%`;
   compressionText.textContent =
     `The summary is about ${compression}% shorter than the extracted text.`;
 
@@ -456,9 +457,12 @@ historyList.addEventListener("click", event => {
     keywords: item.keywords || [],
     originalWords: item.originalWords,
     summaryWords: item.summaryWords,
-    compression: item.originalWords
-      ? Math.round((1 - item.summaryWords / item.originalWords) * 100)
-      : 0,
+   compression: item.originalWords
+    ? Math.max(
+      0,
+      Math.round((1 - item.summaryWords / item.originalWords) * 100)
+    )
+   : 0,
     sentenceCount: 0,
     summarySentenceCount: 0,
     length: item.length
